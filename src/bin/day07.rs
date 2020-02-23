@@ -9,18 +9,13 @@ struct Above(char, char);
 fn main() {
     let input = include_str!("../../input-day07-simple");
 
-    // let re = Regex::new(r"^Step (?P<before>.) must be finished before step (?P<after>).) can begin.$").unwrap();
     let re = Regex::new(r"Step (?P<before>.) must be finished before step (?P<after>.) can begin.").unwrap();
 
     let dirs: Vec<Above> = re.captures_iter(input).map(|caps| {
-        // let res: Option<&str> = cap.name("before").map(|login| login.as_str());
         let before = caps.name("before").unwrap().as_str().chars().next().unwrap();
         let after = caps.name("after").unwrap().as_str().chars().next().unwrap();
-        // println!("before {:?} after {:?}", before, after);
         Above(before, after)
     }).collect();
-
-    // println!("dirs {:?}", dirs);
 
     let mut hashmap: HashMap<char, HashSet<char>> = HashMap::new();
     let mut hashmap_reverse: HashMap<char, HashSet<char>> = HashMap::new();
