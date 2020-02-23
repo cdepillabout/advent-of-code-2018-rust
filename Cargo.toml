@@ -6,3 +6,4 @@ edition = "2018"
 default-run = "day07"
 
 [dependencies]
+regex = "1.3.4"

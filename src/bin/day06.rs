@@ -132,15 +132,15 @@ fn manhattan_dist(p1: Point, p2: Point) -> i32 {
 }
 
 // Collect the number of each distinct value in a HashMap.
-fn collect_num_vals<Key, Value>(hashmap: HashMap<Key, Value>) -> HashMap<Value, u32> 
+fn collect_num_vals<Key, Value>(hashmap: HashMap<Key, Value>) -> HashMap<Value, u32>
 where
     Value: Copy + Eq + std::hash::Hash
 {
     let mut new_hashmap: HashMap<Value, u32> = HashMap::new();
 
     for val in hashmap.values() {
-        let does_already_exist = new_hashmap.get(val);
-            
+        let does_already_exist: Option<u32> = new_hashmap.get(val).copied();
+
         match does_already_exist {
             Some(existing_num) => new_hashmap.insert(*val, existing_num + 1),
             None => new_hashmap.insert(*val, 1),

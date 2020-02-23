@@ -32,11 +32,11 @@ fn react(contents: String) -> usize {
     let mut vec = Vec::new();
 
     // println!("{}", contents);
-    let mut i = 0;
+    let mut _i = 0;
     for c in contents.chars() {
         if c.is_ascii_alphabetic() {
             // if i > 30 { break; }
-            i += 1;
+            _i += 1;
 
             // print!("{}, current stack: {:?}, next character: {}", i, vec, c);
             let top = vec.pop();
