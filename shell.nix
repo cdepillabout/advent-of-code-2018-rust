@@ -11,18 +11,21 @@ with import src {};
 stdenv.mkDerivation {
   name = "advent-of-code-2018-rust-env";
   nativeBuildInputs = [
-    cargo
-    rustc
-    rustfmt
+    # Things like cargo, rustc, rustfmt, and clippy can be installed with commands like
+    #
+    # $ rustup component add clippy
     rustup
 
-    # Example Build-time Additional Dependencies
     pkgconfig
   ];
   buildInputs = [
-    # Example Run-time Additional Dependencies
     openssl
   ];
+
+  shellHook = ''
+    # TODO: This clobbers MANPATH if it is already set.
+    export MANPATH=":${xorg.libxcb.man}/share/man"
+  '';
 
   # Set Environment Variables
   #RUST_BACKTRACE = 1;
