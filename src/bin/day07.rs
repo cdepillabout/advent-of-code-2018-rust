@@ -116,8 +116,8 @@ fn main() {
         i+=1;
         println!("_______________________________________________________________________________________________________________________________");
 
-        let mut line = String::new();
-        let _ = std::io::stdin().read_line(&mut line).expect("Failed to read line");
+        // let mut line = String::new();
+        // let _ = std::io::stdin().read_line(&mut line).expect("Failed to read line");
     }
 
     let mut leftovers: Vec<char> = hashmap_reverse.keys().copied().collect();
