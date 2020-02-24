@@ -5,7 +5,7 @@ use std::collections::{HashMap, HashSet};
 struct Above(char, char);
 
 fn main() {
-    let input = include_str!("../../input-day07-simple");
+    let input = include_str!("../../input-day07");
 
     let re = Regex::new(r"Step (?P<before>.) must be finished before step (?P<after>.) can begin.").unwrap();
 
@@ -121,10 +121,10 @@ fn main() {
         i += 1;
         println!("_______________________________________________________________________________________________________________________________");
 
-        let mut line = String::new();
-        let _ = std::io::stdin()
-            .read_line(&mut line)
-            .expect("Failed to read line");
+        // let mut line = String::new();
+        // let _ = std::io::stdin()
+        //     .read_line(&mut line)
+        //     .expect("Failed to read line");
     }
 
     dbg!(&order);
