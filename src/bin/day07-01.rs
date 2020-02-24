@@ -83,59 +83,48 @@ fn main() {
         dbg!(i);
 
         // Characters that only exist in the before column.
-        let mut first_chars: Vec<char> = get_available(hashmap, hashmap_reverse);
+        let first_chars: Vec<char> = get_available(&hashmap, &hashmap_reverse);
 
         dbg!(&first_chars);
 
         // The direct dependencies from the characters that only exist in the before column.
-        let direct_deps: HashSet<char> = first_chars
-            .iter()
-            .flat_map(|c| hashmap.get(c).unwrap())
-            .copied()
-            .collect::<HashSet<char>>();
+        let direct_deps = get_direct_deps(&hashmap, &first_chars);
 
         dbg!(&direct_deps);
 
-        for c in direct_deps {
-            // The reverse dependencies for a char.
-            let stuff: &mut HashSet<char> =
-                hashmap_reverse.get_mut(&c).unwrap();
+        match first_chars.split_first() {
+            None => break,
+            Some((first_char, _)) => {
+                order.push(*first_char);
+                hashmap.remove(first_char);
 
-            // Remove all of the before deps from the list of reverse deps.
-            for d in &first_chars {
-                stuff.remove(d);
-            }
+                for rev_dep in direct_deps {
+                    let rev_deps: &mut HashSet<char> = hashmap_reverse
+                        .get_mut(&rev_dep)
+                        .expect("Rev dep should always exist");
 
-            if stuff.is_empty() {
-                hashmap_reverse.remove(&c);
+                    rev_deps.remove(first_char);
+
+                    if rev_deps.is_empty() {
+                        hashmap_reverse.remove(&rev_dep);
+                    }
+                }
+
+                hashmap_reverse.remove(first_char);
             }
         }
 
-        for c in &first_chars {
-            order.push(*c);
-            hashmap.remove(c);
-        }
-
-        dbg!(&order);
         dbg!(&hashmap);
         dbg!(&hashmap_reverse);
-
-        if hashmap.is_empty() {
-            break;
-        }
+        dbg!(&order);
 
         i += 1;
         println!("_______________________________________________________________________________________________________________________________");
 
-        // let mut line = String::new();
-        // let _ = std::io::stdin().read_line(&mut line).expect("Failed to read line");
-    }
-
-    let mut leftovers: Vec<char> = hashmap_reverse.keys().copied().collect();
-    leftovers.sort();
-
-    for c in leftovers {
-        order.push(c);
+        let mut line = String::new();
+        let _ = std::io::stdin()
+            .read_line(&mut line)
+            .expect("Failed to read line");
     }
 
     dbg!(&order);
@@ -143,19 +132,33 @@ fn main() {
     println!("{}", order.iter().collect::<String>());
 }
 
+fn get_direct_deps(
+    hashmap: &HashMap<char, HashSet<char>>,
+    first_chars: &Vec<char>,
+) -> HashSet<char> {
+    first_chars
+        .iter()
+        .flat_map(|c| hashmap.get(c).unwrap())
+        .copied()
+        .collect()
+}
+
 /// Return characters that only exist in the before column.
-fn get_available(hashmap: HashMap<char, Vec<char>>, hashmap_reverse: HashMap<char, Vec<char>>) -> Vec<char> {
-        let hashmap_keys: HashSet<char> = hashmap.keys().copied().collect();
-        let hashmap_reverse_keys: HashSet<char> =
-            hashmap_reverse.keys().copied().collect();
+fn get_available(
+    hashmap: &HashMap<char, HashSet<char>>,
+    hashmap_reverse: &HashMap<char, HashSet<char>>,
+) -> Vec<char> {
+    let hashmap_keys: HashSet<char> = hashmap.keys().copied().collect();
+    let hashmap_reverse_keys: HashSet<char> =
+        hashmap_reverse.keys().copied().collect();
 
-        // Characters that only exist in the before column.
-        let mut first_chars: Vec<char> = hashmap_keys
-            .difference(&hashmap_reverse_keys)
-            .cloned()
-            .collect();
+    // Characters that only exist in the before column.
+    let mut first_chars: Vec<char> = hashmap_keys
+        .difference(&hashmap_reverse_keys)
+        .cloned()
+        .collect();
 
-        first_chars.sort();
+    first_chars.sort();
 
-        first_chars
+    first_chars
 }
